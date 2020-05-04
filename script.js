@@ -24,11 +24,14 @@ for (var i = 0; i < events.length; i++) {
 
     var eventCol = $('<textarea>');
     eventCol.attr("class", "textarea");
+    eventCol.attr("id", events[i]);
     eventCol.width(800);
+
+    appts.push(eventCol);
+
     
     var saveCol = $('<td>');
     var saveButton = $('<button>');
-    saveButton.attr("id", "submit");
     saveButton.attr("class", "saveBtn");
     saveButton.text("Save");
     saveCol.append(saveButton);
@@ -50,26 +53,35 @@ for (var i = 0; i < events.length; i++) {
 
         } else {
         eventCol.attr("class", "present");
-
     }; 
 };
 
 function showSavedEvents() {
-    typedEvents = localStorage.getItem(eventCol[0].value);
+    for (var i = 0; i < events.length; i++) {
 
-    typedEvents = JSON.parse(typedEvents);
+        typedEvents = localStorage.getItem(events[i]);
 
-    appts.push(typedEvents);
-    };
+        typedEvents = JSON.parse(typedEvents);
+
+        appts[i].text(typedEvents);
+    
+        console.log(typedEvents);
+    }
+};
 
 showSavedEvents(); 
 
-$("submit").on('click', 'button', function(event){
+$(".saveBtn").on('click', function(event) {
     event.preventDefault();
 
-    oneEvent = eventCol[0].value;
+    const singleEvent = event.target.parentNode.parentNode.childNodes[1];
 
-    localStorage.setItem("typedEvents", JSON.stringify(oneEvent)); 
+    oneEventValue = singleEvent.value;
+
+    const timeID = singleEvent.id;
+
+    localStorage.setItem(timeID, JSON.stringify(oneEventValue)); 
+
     showSavedEvents();
 });
 
